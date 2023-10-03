@@ -49,10 +49,12 @@ export default async () => {
     );
   } else if (eslintCjsConfigExists) {
     // use cjs eslint config if it exists
-    const eslintConfig = fs.readFileSync(".eslintrc.cjs", "utf8").toString();
+    // load the config file as a module loaded from a file
+    const eslintConfig = require(eslintCjsConfigFile);
     await eslint(eslintConfig, [".ts", ".tsx"]);
   } else if (eslintJsonConfigExists) {
     // use json eslint config if it exists
+    // load the config file as a string, it will be parsed as json
     const eslintConfig = fs.readFileSync(".eslintrc.json", "utf8").toString();
     await eslint(eslintConfig, [".ts", ".tsx"]);
   }
