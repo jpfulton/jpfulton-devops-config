@@ -47,7 +47,14 @@ export default async () => {
   }
 
   // Run Yarn Plugin
-  await yarn();
+  if (!fs.existsSync("package.json") || !fs.existsSync("yarn.lock")) {
+    warn(
+      "Yarn configuration file not found. Please create a package.json and yarn.lock file at the root of the project."
+    );
+  }
+  else {
+    await yarn();
+  }
 
   // Run License Auditor Plugin
   await licenseAuditor({
