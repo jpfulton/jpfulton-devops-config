@@ -53,7 +53,9 @@ export default async () => {
     const eslintCjsConfigPath = `${process.cwd()}/${eslintCjsConfigFile}`;
     // load the config file as a module loaded from a file using a dynamic import
     const eslintConfig = await import(eslintCjsConfigPath);
-    await eslint(eslintConfig, [".ts", ".tsx"]);
+    // pass the config to the eslint plugin
+    // as a module import its top level property is the default export
+    await eslint(eslintConfig.default, [".ts", ".tsx"]);
   } else if (eslintJsonConfigExists) {
     // use json eslint config if it exists
     // load the config file as a string, it will be parsed as json
