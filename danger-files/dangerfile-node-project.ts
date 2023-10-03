@@ -61,6 +61,8 @@ export default async () => {
     warn(
       "Package.json file not found at root of project."
     );
+  }
+  else {
     if (!fs.existsSync("node_modules")) {
       warn(
         "node_modules not found at root of project. Please run 'yarn install' in the workflow prior to executing this action."
