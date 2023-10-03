@@ -49,8 +49,10 @@ export default async () => {
     );
   } else if (eslintCjsConfigExists) {
     // use cjs eslint config if it exists
+    // build an absolute path to the config file
+    const eslintCjsConfigPath = `file://${process.cwd()}/${eslintCjsConfigFile}`;
     // load the config file as a module loaded from a file using a dynamic import
-    const eslintConfig = await import(`./${eslintCjsConfigFile}`);
+    const eslintConfig = await import(eslintCjsConfigPath);
     await eslint(eslintConfig, [".ts", ".tsx"]);
   } else if (eslintJsonConfigExists) {
     // use json eslint config if it exists
