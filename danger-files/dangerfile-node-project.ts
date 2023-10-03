@@ -37,11 +37,22 @@ export default async () => {
   }
 
   // Run ESLint Plugin
-  if (!fs.existsSync(".eslintrc.json")) {
+  const eslintCjsConfigFile = ".eslintrc.cjs";
+  const eslintJsonConfigFile = ".eslintrc.json";
+
+  const eslintCjsConfigExists = fs.existsSync(eslintCjsConfigFile);
+  const eslintJsonConfigExists = fs.existsSync(eslintJsonConfigFile);
+
+  if (!eslintCjsConfigExists && !eslintJsonConfigExists) {
     warn(
       "ESLint configuration file not found. Please create a .eslintrc.json file at the root of the project."
     );
-  } else {
+  } else if (eslintCjsConfigExists) {
+    // use cjs eslint config if it exists
+    const eslintConfig = fs.readFileSync(".eslintrc.cjs", "utf8").toString();
+    await eslint(eslintConfig, [".ts", ".tsx"]);
+  } else if (eslintJsonConfigExists) {
+    // use json eslint config if it exists
     const eslintConfig = fs.readFileSync(".eslintrc.json", "utf8").toString();
     await eslint(eslintConfig, [".ts", ".tsx"]);
   }
