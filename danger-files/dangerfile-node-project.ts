@@ -57,12 +57,27 @@ export default async () => {
   }
 
   // Run License Auditor Plugin
-  await licenseAuditor({
-    failOnBlacklistedLicense: false,
-    projectPath: ".",
-    remoteConfigurationUrl:
-      "https://raw.githubusercontent.com/jpfulton/jpfulton-license-audits/main/.license-checker.json",
-    showMarkdownSummary: true,
-    showMarkdownDetails: true,
-  });
+  if (!fs.existsSync("package.json")) {
+    warn(
+      "Package.json file not found at root of project."
+    );
+    if (!fs.existsSync("node_modules")) {
+      warn(
+        "node_modules not found at root of project. Please run 'yarn install' in the workflow prior to executing this action."
+      );
+    }
+    else {
+      // the license auditor will fail if there is no package.json file
+      // or if the node_modules directory is not present from an installation
+      // of the project dependencies
+      await licenseAuditor({
+        failOnBlacklistedLicense: false,
+        projectPath: ".",
+        remoteConfigurationUrl:
+          "https://raw.githubusercontent.com/jpfulton/jpfulton-license-audits/main/.license-checker.json",
+        showMarkdownSummary: true,
+        showMarkdownDetails: true,
+      });
+    }
+  }
 };
