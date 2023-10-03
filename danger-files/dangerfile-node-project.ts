@@ -50,7 +50,7 @@ export default async () => {
   } else if (eslintCjsConfigExists) {
     // use cjs eslint config if it exists
     // build an absolute path to the config file
-    const eslintCjsConfigPath = `file://${process.cwd()}/${eslintCjsConfigFile}`;
+    const eslintCjsConfigPath = `${process.cwd()}/${eslintCjsConfigFile}`;
     // load the config file as a module loaded from a file using a dynamic import
     const eslintConfig = await import(eslintCjsConfigPath);
     await eslint(eslintConfig, [".ts", ".tsx"]);
