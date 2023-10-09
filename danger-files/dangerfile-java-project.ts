@@ -26,10 +26,15 @@ export default async () => {
 
   // Run the Java License Auditor Plugin
   const mavenDependenciesReportFile = "target/site/dependencies.html";
-  if (!fs.existsSync(mavenDependenciesReportFile)) {
-    warn(
-      "Maven dependencies report not found. Please either add a step above this action to run Maven and create a dependencies.html file and/or integrate Maven and add some dependencies."
-    );
+  const gradleLicenseReportFile = "build/licenses/licenses.json";
+  const gradleLicenseReportFileAlternate = "licenses/licenses.json";
+
+  if (
+    !fs.existsSync(mavenDependenciesReportFile) &&
+    !fs.existsSync(gradleLicenseReportFile) &&
+    !fs.existsSync(gradleLicenseReportFileAlternate)
+  ) {
+    warn("Unable to find a dependency license report.");
   } else {
     await javaLicenseAuditor({
       failOnBlacklistedLicense: false,
